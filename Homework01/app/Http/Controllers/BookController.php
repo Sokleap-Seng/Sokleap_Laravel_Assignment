@@ -41,7 +41,7 @@ class BookController extends Controller
         return response()->json([
             'message' => 'Success create',
             'data' => [
-                'id' => $id,
+                'id'=>$id,
                 'title' => $request->title,
                 'authorId' => $request->authorId, 
                 'isbn' => $request->isbn,

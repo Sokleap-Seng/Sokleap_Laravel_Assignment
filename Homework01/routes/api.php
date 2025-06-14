@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\BookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,12 +15,22 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::prefix("/book")->group(function(){
+// Books 
+Route::prefix("/books")->group(function(){
     Route::get("/", [BookController::class, "index"]);
     Route::get("/{id}", [BookController::class, "show"]);
     Route::post("/create/{id}", [BookController::class,"create"]);
     Route::put("/update/{id}", [BookController::class,"update"]);
     Route::delete("/delete/{id}", [BookController::class,"delete"]);
+});
+
+// Authors
+Route::prefix("/authors")->group(function(){
+    Route::get("/", [AuthorsController::class, "index"]);
+    Route::get("/{id}", [AuthorsController::class, "show"]);
+    Route::post("/create", [AuthorsController::class, "create"]);
+    Route::put("/update/{id}", [AuthorsController::class, "update"]);
+    Route::delete("/delete/{id}", [AuthorsController::class, "delete"]);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
