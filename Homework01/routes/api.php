@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,15 @@ Route::prefix("/authors")->group(function(){
     Route::post("/create", [AuthorsController::class, "create"]);
     Route::put("/update/{id}", [AuthorsController::class, "update"]);
     Route::delete("/delete/{id}", [AuthorsController::class, "delete"]);
+});
+
+// Users
+Route::prefix("/users")->group(function(){
+    Route::get('/', [UsersController::class, 'index']);
+    Route::get('/{id}', [UsersController::class, 'show']);
+    Route::post('/create', [UsersController::class, 'create']);
+    Route::put('/update/{id}', [UsersController::class, 'update']);
+    Route::delete('/delete/{id}', [UsersController::class, 'delete']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
