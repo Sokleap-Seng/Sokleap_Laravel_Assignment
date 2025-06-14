@@ -8,12 +8,36 @@ class BookController extends Controller
 {
     //
     public $books = [
-        ['id'=> '1' , 'title'=>'Pride and Prejudice', 'authorld'=>'authorld 1', 'isbn'=>'12345', 'publicationYear'=>'2023', 'genre'=>'Romance', 'availableCopies'=>'1'],
-        ['id'=> '2' , 'title'=>'Breaking the Silence', 'authorld'=>'authorld 2', 'isbn'=>'21346', 'publicationYear'=>'2024', 'genre'=>'Drama', 'availableCopies'=>'2'],
-        ['id'=> '3' , 'title'=>'Mind Trap', 'authorld'=>'authorld 3', 'isbn'=>'82943', 'publicationYear'=>'2025', 'genre'=>'Thriller', 'availableCopies'=>'3'],
+        [
+            'id'=> '1' , 
+            'title'=>'Pride and Prejudice', 
+            'authorld'=>'authorld 1', 
+            'isbn'=>'12345', 
+            'publicationYear'=>'2023', 
+            'genre'=>'Romance', 
+            'availableCopies'=>'1'
+        ],
+        [
+            'id'=> '2' , 
+            'title'=>'Breaking the Silence', 
+            'authorld'=>'authorld 2', 
+            'isbn'=>'21346', 
+            'publicationYear'=>'2024', 
+            'genre'=>'Drama', 
+            'availableCopies'=>'2'
+        ],
+        [
+            'id'=> '3' , 
+            'title'=>'Mind Trap', 
+            'authorld'=>'authorld 3', 
+            'isbn'=>'82943', 
+            'publicationYear'=>'2025', 
+            'genre'=>'Thriller', 
+            'availableCopies'=>'3'
+        ],
     ];
 
-    // get data books
+    // Retrieve a list of all books។
     public function index(){
         return response()->json([
             'message' => 'Data return success',
@@ -21,7 +45,7 @@ class BookController extends Controller
         ],200);
     }
 
-    // show book specific by id
+    // Retrieve a single book by its ID.
     public function show($id)
     {
         foreach ($this->books as $book) {
@@ -35,13 +59,13 @@ class BookController extends Controller
         return response()->json(['message' => 'Book not found'], 404);
     }
 
-    // create data book
-    public function create(Request $request, string $id)
+    // Add a new book. 
+    public function create(Request $request)
     {
         return response()->json([
             'message' => 'Success create',
             'data' => [
-                'id'=>$id,
+                'id'=> $request->id,
                 'title' => $request->title,
                 'authorId' => $request->authorId, 
                 'isbn' => $request->isbn,
@@ -66,7 +90,6 @@ class BookController extends Controller
                 }
                 // If data is sent, overwrite with request data
                 $this->books[$index] = $request->all();
-
                 return response()->json([
                     'message' => 'Book updated successfully',
                     'book' => $this->books[$index]
@@ -76,13 +99,12 @@ class BookController extends Controller
         return response()->json(['message' => 'Book not found'], 404);
     }
 
-    // DELETE /api/books/{id}: Delete a book by its ID
+    // Delete a book by its ID
     public function delete($id)
     {
         foreach ($this->books as $index => $book) {
             if ($book['id'] == $id) {
                 unset($this->books[$index]);
-
                 return response()->json([
                     'message' => 'Book deleted successfully',
                     'id'=> $id,
