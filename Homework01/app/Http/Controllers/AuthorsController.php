@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAuthorRequest;
 use App\Models\Author;
 
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class AuthorsController extends Controller
         ]);
 
          if($author){
-             return response()->json([
+            return response()->json([
             'message' => 'create successfuly',
             'data' => $author
                 
@@ -51,31 +52,34 @@ class AuthorsController extends Controller
         return response()->json([
             'message'=>'Author create failed'
         ],203);
-
-
     }
+    
+    // public function create(StoreAuthorRequest $request){
+    //     $author = Author::create($request->all());
+
+    //     return response()->json([
+    //         'message'=>'author create successfully',
+    //         'data'=> $author
+    //     ],201);
+    // }
 
     // Update an existing author by their ID
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
-        $author = Author::where('id', $id)
-            ->update([
-                'name' => $request->title,
-                'bio' => $request->body,
-                'nationality' => $request->nationality
-            ]);
-        if ($author) {
-            return response()->json([
-                'message' => 'Author updated successfully',
-                'data' =>  $author
-            ], 201);
+       $author = Author::where('id',$id)->update([
+            'name'=>$request-> name,
+            'bio'=>$request-> bio,
+            'nationality'=>$request->nationality
+       ]);
+       if($author){
+           return response()->json([
+                'message'=> "author updated successfully",
+                'data'=>$author
+            ],201);
+       }
+            return response()->json(['message' => 'Book not found'], 404);
         }
-
-        return response()->json([
-            'message' => "Failed to update author"
-        ], 203);
-    }
-
+   
     // // Delete an author by their ID.
     public function delete($id)
     {
@@ -83,7 +87,6 @@ class AuthorsController extends Controller
         if ($author ) {
             return response()->json([
                 'message' => 'author  deleted successfully',
-                'data' =>  $author 
             ], 201);
         }
 
