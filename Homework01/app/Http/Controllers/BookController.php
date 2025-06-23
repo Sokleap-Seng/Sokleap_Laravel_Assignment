@@ -2,115 +2,101 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class BookController extends Controller
 {
-    //
-    public $books = [
-        [
-            'id'=> '1' , 
-            'title'=>'Pride and Prejudice', 
-            'authorld'=>'authorld 1', 
-            'isbn'=>'12345', 
-            'publicationYear'=>'2023', 
-            'genre'=>'Romance', 
-            'availableCopies'=>'1'
-        ],
-        [
-            'id'=> '2' , 
-            'title'=>'Breaking the Silence', 
-            'authorld'=>'authorld 2', 
-            'isbn'=>'21346', 
-            'publicationYear'=>'2024', 
-            'genre'=>'Drama', 
-            'availableCopies'=>'2'
-        ],
-        [
-            'id'=> '3' , 
-            'title'=>'Mind Trap', 
-            'authorld'=>'authorld 3', 
-            'isbn'=>'82943', 
-            'publicationYear'=>'2025', 
-            'genre'=>'Thriller', 
-            'availableCopies'=>'3'
-        ],
-    ];
-
     // Retrieve a list of all books។
-    public function index(){
+     public function index()
+    {
+        $book = new Book();
         return response()->json([
-            'message' => 'Data return success',
-            'data' => $this->books,
-        ],200);
+            'message' => 'Successfully!',
+            'data' => Book::all(),
+        ], 200);
     }
 
+    
+
     // Retrieve a single book by its ID.
-    public function show($id)
+    public function show( string $id)
     {
-        foreach ($this->books as $book) {
-            if ($book['id'] === $id) {
-                return response()->json([
-                    'message' => 'Book found',
-                    'data' => $book
-                ], 200);
-            }
+        $book = Book::where('id',$id)->get();
+        if($book){
+            return response()-> json([
+                'message'=>"Book show success",
+                'data'=>$book
+            ],200);
         }
-        return response()->json(['message' => 'Book not found'], 404);
+        return response()->json([
+            'message'=> "book cannot show"
+        ],203);
     }
 
     // Add a new book. 
-    public function create(Request $request)
+  public function create(Request $request)
     {
+        $book = Book::create([
+            'title'=>$request->title,
+            'author'=>$request-> author,
+            'isbn'=>$request->isbn,
+            'published_year'=>$request->published_year,
+            'genre'=> $request->genre,
+            'available_copies'=>$request->available_copies
+        ]);
+        if($book){
+             return response()->json([
+            'message' => 'create successfuly',
+            'data' => $book
+                
+        ], 201); 
+        }
         return response()->json([
-            'message' => 'Success create',
-            'data' => [
-                'id'=> $request->id,
-                'title' => $request->title,
-                'authorId' => $request->authorId, 
-                'isbn' => $request->isbn,
-                'publicationYear' => $request->publicationYear,
-                'genre' => $request->genre,
-                'availableCopies' => $request->availableCopies,
-            ],
-        ], 201);
+            'message'=>'Book create failed'
+        ],203);
+      
     }
 
     //  Update an existing book by its ID
   public function update(Request $request, $id)
     {
-        foreach ($this->books as $index => $book) {
-            if ($book['id'] == $id) {
-                // If no data is sent, return the current book data
-                if (empty($request->all())) {
-                    return response()->json([
-                        'message' => 'Showing current book.',
-                        'book' => $book
-                    ]);
-                }
-                // If data is sent, overwrite with request data
-                $this->books[$index] = $request->all();
-                return response()->json([
-                    'message' => 'Book updated successfully',
-                    'book' => $this->books[$index]
-                ]);
-            }
+        $book = Book::where('id',$id)-> update([
+            'title' => $request->title,
+            'authorId' => $request->authorId, 
+            'isbn' => $request->isbn,
+            'publication_year' => $request->publication_year,
+            'genre' => $request->genre,
+            'available_copies' => $request->available_copies,
+        ]);
+        if($book){
+            return response()->json([
+                'message'=> "Book updated successfully",
+                'data'=>$book
+            ],201);
+
         }
-        return response()->json(['message' => 'Book not found'], 404);
+        return response()->json([
+            'message'=> "failed to update book"
+        ],203);
     }
 
+
     // Delete a book by its ID
-    public function delete($id)
+    public function delete(string $id)
     {
-        foreach ($this->books as $index => $book) {
-            if ($book['id'] == $id) {
-                unset($this->books[$index]);
-                return response()->json([
-                    'message' => 'Book deleted successfully',
-                    'id'=> $id,
-                ]);
-            }
+        $book = Book::where('id',$id)->delete();
+        if($book){
+            return response()->json([
+                'message'=>"delete book success",
+                'data' => $book
+            ],200);
         }
-        return response()->json(['message' => 'Book not found'], 404);
+
+        // If book not found
+        return response()->json([
+            'message' => 'Book not found, cannot delete'
+        ], 404);
     }
 }
