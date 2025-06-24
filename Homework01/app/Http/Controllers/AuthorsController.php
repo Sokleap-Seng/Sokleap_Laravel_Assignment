@@ -34,7 +34,7 @@ class AuthorsController extends Controller
         ], 203);
     }
 
-    // Add a new author
+// Add a new author
     // public function create(Request $request){
     //     $author= Author::create([
     //         'name' => $request-> name,
@@ -54,29 +54,32 @@ class AuthorsController extends Controller
     //     ],203);
     // }
     
-    public function create(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            'name'=>"required|string|min:2|max:255",
-            'bio'=>"string",
-            'nationality'=>"string",
-        ]);
+// Basic Validator  
+    // public function create(Request $request){
+    //     $validator = Validator::make($request->all(), [
+    //         'name'=>"required|string|min:2|max:255",
+    //         'bio'=>"string",
+    //         'nationality'=>"string",
+    //     ]);
         
-        if($validator->fails()){
-           return $validator->messages();
-        }
+    //     if($validator->fails()){
+    //        return $validator->messages();
+    //     }
 
+    //     $author = Author::create($request->all());
+    //     return response()->json([
+    //         "message" => "Success",
+    //         "data" => $author
+    //     ]);
+    // }
+
+// Validator with requests
+    public function create(Request $request){
         $author = Author::create($request->all());
         return response()->json([
-            "message" => "Success",
-            "data" => $author
-        ]);
-
-        // $author = Author::create($request->all());
-        // return response()->json([
-        //     'message'=>'author create successfully',
-        //     'data'=> $author
-        // ],201);
+            'message'=>'author create successfully',
+            'data'=> $author
+        ],201);
     }
 
     // Update an existing author by their ID
