@@ -36,27 +36,27 @@ class BookController extends Controller
     }
 
     // Add a new book. 
-  public function create(Request $request)
+    public function create(Request $request)
     {
         $book = Book::create([
-            'title'=>$request->title,
-            'author'=>$request-> author,
-            'isbn'=>$request->isbn,
-            'published_year'=>$request->published_year,
-            'genre'=> $request->genre,
-            'available_copies'=>$request->available_copies
+            'title' => $request->title,
+            'authorId' => $request->authorId, 
+            'isbn' => $request->isbn,
+            'publication_year' => $request->publication_year,
+            'genre' => $request->genre,
+            'available_copies' => $request->available_copies,
         ]);
-        if($book){
-             return response()->json([
-            'message' => 'create successfuly',
-            'data' => $book
-                
-        ], 201); 
+
+        if ($book) {
+            return response()->json([
+                'message' => 'Create successful',
+                'data' => $book
+            ], 201);
         }
+
         return response()->json([
-            'message'=>'Book create failed'
-        ],203);
-      
+            'message' => 'Book creation failed'
+        ], 500);
     }
 
     //  Update an existing book by its ID
@@ -73,7 +73,6 @@ class BookController extends Controller
         if($book){
             return response()->json([
                 'message'=> "Book updated successfully",
-                'data'=>$book
             ],201);
 
         }
@@ -90,7 +89,6 @@ class BookController extends Controller
         if($book){
             return response()->json([
                 'message'=>"delete book success",
-                'data' => $book
             ],200);
         }
 

@@ -13,7 +13,7 @@ class StoreBookRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     protected function failedValidation(Validator $validator){

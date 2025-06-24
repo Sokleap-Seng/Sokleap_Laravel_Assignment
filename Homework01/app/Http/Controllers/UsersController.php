@@ -104,7 +104,6 @@ class UsersController extends Controller
                 unset($this->authors[$index]);
                 return response()->json([
                     'message' => 'user deleted successfully',
-                    'id'=> $id,
                 ]);
             }
         }
