@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAuthorRequest;
 use App\Models\Author;
-
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class AuthorsController extends Controller
@@ -35,33 +35,49 @@ class AuthorsController extends Controller
     }
 
     // Add a new author
+    // public function create(Request $request){
+    //     $author= Author::create([
+    //         'name' => $request-> name,
+    //         'bio' => $request->bio,
+    //         'nationality' => $request->nationality
+    //     ]);
+
+    //      if($author){
+    //         return response()->json([
+    //         'message' => 'create successfuly',
+    //         'data' => $author
+                
+    //     ], 201); 
+    //     }
+    //     return response()->json([
+    //         'message'=>'Author create failed'
+    //     ],203);
+    // }
+    
     public function create(Request $request){
-        $author= Author::create([
-            'name' => $request-> name,
-            'bio' => $request->bio,
-            'nationality' => $request->nationality
+
+        $validator = Validator::make($request->all(), [
+            'name'=>"required|string|min:2|max:255",
+            'bio'=>"string",
+            'nationality'=>"string",
+        ]);
+        
+        if($validator->fails()){
+           return $validator->messages();
+        }
+
+        $author = Author::create($request->all());
+        return response()->json([
+            "message" => "Success",
+            "data" => $author
         ]);
 
-         if($author){
-            return response()->json([
-            'message' => 'create successfuly',
-            'data' => $author
-                
-        ], 201); 
-        }
-        return response()->json([
-            'message'=>'Author create failed'
-        ],203);
+        // $author = Author::create($request->all());
+        // return response()->json([
+        //     'message'=>'author create successfully',
+        //     'data'=> $author
+        // ],201);
     }
-    
-    // public function create(StoreAuthorRequest $request){
-    //     $author = Author::create($request->all());
-
-    //     return response()->json([
-    //         'message'=>'author create successfully',
-    //         'data'=> $author
-    //     ],201);
-    // }
 
     // Update an existing author by their ID
     public function update(Request $request, $id)
@@ -76,7 +92,7 @@ class AuthorsController extends Controller
                 'message'=> "author updated successfully",
                 'data'=>$author
             ],201);
-       }
+        }
             return response()->json(['message' => 'Book not found'], 404);
         }
    
