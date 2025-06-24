@@ -33,9 +33,9 @@ class StoreBookRequest extends FormRequest
             'title'=>"required|string|min:2|max:255",
             'author'=>"string",
             'isbn'=>"string",
-            'publication_year'=>"string",
+            'publication_year'=>"integer",
             'genre'=> "string",
-            'available_copies'=>"string"
+            'available_copies'=>"integer"
         ];
     }
 }
