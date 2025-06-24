@@ -74,7 +74,7 @@ class AuthorsController extends Controller
     // }
 
 // Validator with requests
-    public function create(Request $request){
+    public function create(StoreAuthorRequest $request){
         $author = Author::create($request->all());
         return response()->json([
             'message'=>'author create successfully',
@@ -93,7 +93,6 @@ class AuthorsController extends Controller
        if($author){
            return response()->json([
                 'message'=> "author updated successfully",
-                'data'=>$author
             ],201);
         }
             return response()->json(['message' => 'Book not found'], 404);
