@@ -25,6 +25,11 @@ class BookController extends Controller
   public function show($id)
     {
         $book = Book::with('author')->findOrFail($id);
+        if (!$book->author) {
+            return response()->json([
+                'message' => 'The author does not exist for this book.',
+            ], 404);
+        }
         return response()->json([
             'id' => $book->id,
             'title' => $book->title,
@@ -35,6 +40,7 @@ class BookController extends Controller
             'author' => $book->author->name,
         ]);
     }
+    
 
 // Validator with requests
     public function create(StoreBookRequest $request){
