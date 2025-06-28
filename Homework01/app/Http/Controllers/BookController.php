@@ -37,7 +37,7 @@ class BookController extends Controller
             'publication_year' => $book->publication_year,
             'genre' => $book->genre,
             'available_copies' => $book->available_copies,
-            'author' => $book->author->name,
+            'author' => $book->author,
         ]);
     }
     

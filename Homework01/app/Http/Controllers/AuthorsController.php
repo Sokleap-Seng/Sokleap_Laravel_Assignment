@@ -25,7 +25,7 @@ class AuthorsController extends Controller
             'name' => $author->name,
             'bio' => $author->bio,
             'nationality' => $author->nationality,
-            'books' => $author->books->pluck('title'),
+            'books' => $author->books,
         ]);
     }
 
