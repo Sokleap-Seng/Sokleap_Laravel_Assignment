@@ -9,78 +9,32 @@ use App\Models\Book;
 
 class BookController extends Controller
 {
-    // Retrieve a list of all books។
-     public function index()
+   public function index()
+{
+    $books = Book::with('author')->get();
+
+    return response()->json($books->map(function ($book) {
+        return [
+            'id' => $book->id,
+            'title' => $book->title,
+            'author' => $book->author->name, 
+        ];
+    }));
+}
+
+  public function show($id)
     {
-        $book = new Book();
+        $book = Book::with('author')->findOrFail($id);
         return response()->json([
-            "message" => "Successfully!",
-            "data" => Book::all(),
-        ], 200);
+            'id' => $book->id,
+            'title' => $book->title,
+            'isbn' => $book->isbn,
+            'publication_year' => $book->publication_year,
+            'genre' => $book->genre,
+            'available_copies' => $book->available_copies,
+            'author' => $book->author->name,
+        ]);
     }
-
-    // Retrieve a single book by its ID.
-    public function show( string $id)
-    {
-        $book = Book::where("id",$id)->get();
-        if($book){
-            return response()-> json([
-                "message"=>"Book show success",
-                "data"=>$book
-            ],200);
-        }
-        return response()->json([
-            "message"=> "book cannot show"
-        ],203);
-    }
-
-// Add a new book. 
-    // public function create(Request $request)
-    // {
-    //     $book = Book::create([
-    //         "title" => $request->title,
-    //         "authorId" => $request->authorId, 
-    //         "isbn" => $request->isbn,
-    //         "publication_year" => $request->publication_year,
-    //         "genre" => $request->genre,
-    //         "available_copies" => $request->available_copies,
-    //     ]);
-
-    //     if ($book) {
-    //         return response()->json([
-    //             "message" => "Create successful",
-    //             "data" => $book
-    //         ], 201);
-    //     }
-
-    //     return response()->json([
-    //         "message" => "Book creation failed"
-    //     ], 500);
-    // }
-
-
-// Basic Validator  
-    // public function create(Request $request){
-    //     $validator = Validator::make($request->all(), [
-    //         'title'=>"required|string|min:2|max:255",
-    //         'author'=>"string",
-    //         'isbn'=>"string",
-    //         'publication_year'=>"integer",
-    //         'genre'=> "string",
-    //         'available_copies'=>"integer"
-    //     ]);
-        
-    //     if($validator->fails()){
-    //        return $validator->messages();
-    //     }
-
-    //     $book = Book::create($request->all());
-    //     return response()->json([
-    //         "message" => "Success",
-    //         "data" => $book
-    //     ]);
-    // }
-
 
 // Validator with requests
     public function create(StoreBookRequest $request){
@@ -97,7 +51,7 @@ class BookController extends Controller
     {
         $book = Book::where("id",$id)-> update([
             "title" => $request->title,
-            "authorId" => $request->authorId, 
+            "author_id" => $request->author_id, 
             "isbn" => $request->isbn,
             "publication_year" => $request->publication_year,
             "genre" => $request->genre,

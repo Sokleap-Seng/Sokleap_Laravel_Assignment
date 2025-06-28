@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('author', function (Blueprint $table) {
+        Schema::create('authors', function (Blueprint $table) { // Plural table name
             $table->id();
             $table->string('name');
             $table->string('bio');
@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

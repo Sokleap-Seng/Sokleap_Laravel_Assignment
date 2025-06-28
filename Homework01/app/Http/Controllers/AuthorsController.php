@@ -9,69 +9,25 @@ use Illuminate\Http\Request;
 
 class AuthorsController extends Controller
 {
-    // Retrieve a list of all authors
-    public function index(){
-        $author = new Author();
-        return response()->json([
-            'message' => 'Data return success',
-            'data' => Author::all(),
-        ],200);
-    }
-
-    //  Retrieve a single author by their ID
-    public function show(int $id)
+    public function index()
     {
-        $author = Author::where('id', $id)->get();
-        if ($author) {
-            return response()->json([
-                'message' => 'successfully',
-                'data' =>  $author
-            ], 201);
-        }
-
         return response()->json([
-            'message' => "Author id:" . $id . "not found"
-        ], 203);
+            'message' => 'Get all authors',
+            'data' => Author::all(),
+        ], 200);
     }
 
-// Add a new author
-    // public function create(Request $request){
-    //     $author= Author::create([
-    //         'name' => $request-> name,
-    //         'bio' => $request->bio,
-    //         'nationality' => $request->nationality
-    //     ]);
-
-    //      if($author){
-    //         return response()->json([
-    //         'message' => 'create successfuly',
-    //         'data' => $author
-                
-    //     ], 201); 
-    //     }
-    //     return response()->json([
-    //         'message'=>'Author create failed'
-    //     ],203);
-    // }
-    
-// Basic Validator  
-    // public function create(Request $request){
-    //     $validator = Validator::make($request->all(), [
-    //         'name'=>"required|string|min:2|max:255",
-    //         'bio'=>"string",
-    //         'nationality'=>"string",
-    //     ]);
-        
-    //     if($validator->fails()){
-    //        return $validator->messages();
-    //     }
-
-    //     $author = Author::create($request->all());
-    //     return response()->json([
-    //         "message" => "Success",
-    //         "data" => $author
-    //     ]);
-    // }
+    public function show($id)
+    {
+        $author = Author::with('books')->findOrFail($id);
+        return response()->json([
+            'id' => $author->id,
+            'name' => $author->name,
+            'bio' => $author->bio,
+            'nationality' => $author->nationality,
+            'books' => $author->books->pluck('title'),
+        ]);
+    }
 
 // Validator with requests
     public function create(StoreAuthorRequest $request){
