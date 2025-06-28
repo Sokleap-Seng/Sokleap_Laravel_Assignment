@@ -10,26 +10,16 @@ use App\Models\Book;
 class BookController extends Controller
 {
    public function index()
-{
-    $books = Book::with('author')->get();
-
-    return response()->json($books->map(function ($book) {
-        return [
-            'id' => $book->id,
-            'title' => $book->title,
-            'author' => $book->author->name, 
-        ];
-    }));
-}
+    {
+        return response()->json([
+            'message' => 'Get all authors',
+            'data' => Book::all(),
+        ], 200);
+    }
 
   public function show($id)
     {
         $book = Book::with('author')->findOrFail($id);
-        if (!$book->author) {
-            return response()->json([
-                'message' => 'The author does not exist for this book.',
-            ], 404);
-        }
         return response()->json([
             'id' => $book->id,
             'title' => $book->title,
