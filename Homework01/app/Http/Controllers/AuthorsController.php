@@ -19,7 +19,7 @@ class AuthorsController extends Controller
 
     public function show($id)
     {
-        $author = Author::with('books')->findOrFail($id);
+        $author = Author::with('books')->find($id);
         return response()->json([
             'id' => $author->id,
             'name' => $author->name,
